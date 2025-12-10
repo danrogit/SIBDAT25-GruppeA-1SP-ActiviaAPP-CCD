@@ -33,6 +33,7 @@ namespace ActiviaAPP
             }
         }
 
+        //Attributter for bruger information
         public string? userPassword;
         public string? userFullName;
         public string? userMail;
@@ -52,8 +53,10 @@ namespace ActiviaAPP
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        //Protected virtual metode til at informere UI om ændringer i properties (virtual tillader override i nedarvede klasser)
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
+            //Kalder PropertyChanged hvis den ikke er null, og sender navnet på den ændrede property
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 

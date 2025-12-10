@@ -185,9 +185,9 @@ namespace ActiviaAPP
                     string dateStr = fields.Length > 2 ? fields[2] : string.Empty;
                     string maxStr = fields.Length > 3 ? fields[3] : string.Empty;
 
-                    // Support two formats:
-                    // 1) Title;Description;Date;MaxParticipants;ImagePath   (5 columns)
-                    // 2) Title;Description;Date;MaxParticipants;CurrentParticipants;ImagePath  (6 columns)
+                    //Kan køre to formater:
+                    // 1) Title;Description;Date;MaxParticipants;ImagePath (5 kolonner)
+                    // 2) Title;Description;Date;MaxParticipants;CurrentParticipants;ImagePath (6 kolonner)
                     string currentStr = fields.Length > 4 ? fields[4] : string.Empty;
                     string imgPath = fields.Length > 5 ? fields[5] : (fields.Length > 4 ? fields[4] : string.Empty);
 
@@ -392,16 +392,21 @@ namespace ActiviaAPP
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            // Henter det valgte medlem fra userList
             var selectedUser = userList.SelectedItem as ActiviaAPP.Classes.User;
 
+            // Tjekker om et medlem er valgt
             if (selectedUser == null)
             {
+                // Besked hvis ingen medlem er valgt
                 MessageBox.Show("Vælg et medlem først");
                 return;
             }
 
-            // Slet det markerede medlem fra UserStore
+            //Sletter det valgte medlem fra RegisteredUsers listen
             UserStore.RegisteredUsers.Remove(selectedUser);
+
+            // Bekræftelsesbesked om sletning
             MessageBox.Show($"Brugeren '{selectedUser.FullName}' er blevet slettet");
         }
     }
