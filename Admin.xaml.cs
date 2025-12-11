@@ -13,6 +13,7 @@ namespace ActiviaAPP
     /// <summary>
     /// Kodet af Camilla
     /// </summary>
+
     public partial class Admin : Page
     {
         //Constructor

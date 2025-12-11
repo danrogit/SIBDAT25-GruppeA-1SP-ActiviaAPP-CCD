@@ -3,6 +3,10 @@ using System.Collections.ObjectModel;
 
 namespace ActiviaAPP.Classes
 {
+    /// <summary>
+    /// Kodet af alle
+    /// </summary>
+
     public class ActivityClass
     {
         //Attributter for aktiviteten

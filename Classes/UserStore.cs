@@ -4,6 +4,10 @@ using System.IO;
 
 namespace ActiviaAPP.Classes
 {
+    /// <summary>
+    /// Kodet af alle
+    /// </summary>
+
     //Klasse til håndtering af brugere
     public class UserStore
     {
