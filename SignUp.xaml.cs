@@ -17,7 +17,7 @@ namespace ActiviaAPP
         //Metode der opretter en ny bruger
         private void CreateUser(object sender, RoutedEventArgs e)
         {
-            //Hent værdier fra tekstfelterne
+            //Henter værdierne fra tekstfelterne
             string fullName = FullNameBox.Text;
             string username = UsernameBox.Text;
             string email = EmailBox.Text;
@@ -25,28 +25,31 @@ namespace ActiviaAPP
             string password = PasswordBox.Password;
             string confirmPassword = ConfirmPasswordBox.Password;
 
-            //Tjek om alle felter er udfyldt
+            //Hvis ikke alle fleter er udfyldt:
             if (fullName == "" || username == "" || email == "" || phone == "" || password == "" || confirmPassword == "")
             {
+                //Vises fejlmeddelelse
                 MessageBox.Show("Udfyld alle felter");
                 return;
             }
 
-            //Tjek om adgangskoderne matcher
+            //Hvis ikke adgangskoderne matcher:
             if (password != confirmPassword)
             {
+                //Vises fejlmeddelelse
                 MessageBox.Show("Adgangskoden matcher ikke");
                 return;
             }
 
-            //Tjek om brugernavnet allerede findes
+            //Hvis brugernavnet allerede findes:
             if (UserStore.UsernameExists(username))
             {
+                //Vises fejlmeddelelse
                 MessageBox.Show("Brugernavnet er allerede taget");
                 return;
             }
 
-            //Opret ny bruger - RETTET: Brug Classes.User
+            //Oprettelse af ny bruger
             Classes.User newUser = new Classes.User();
             newUser.FullName = fullName;
             newUser.Username = username;
@@ -54,17 +57,21 @@ namespace ActiviaAPP
             newUser.Phone = phone;
             newUser.Password = password;
 
-            //Gem brugeren i UserStore
+            //Brugeren gemmes i UserStore
             bool success = UserStore.RegisterUser(newUser);
 
-            //Hvis brugeren blev gemt korrekt
+            //Hvis brugeren blev gemt korrekt:
             if (success)
             {
+                //Vises bekræftelsesmeddelelse
                 MessageBox.Show(username + " blev oprettet. Du kan nu logge ind");
                 NavigationService.Navigate(new Login());
             }
+
+            //Hvis brugeren ikke blev gemt korrekt:
             else
             {
+                //Vises fejlmeddelelse
                 MessageBox.Show("Brugeren blev ikke oprettet, prøv igen");
             }
         }
@@ -72,6 +79,7 @@ namespace ActiviaAPP
         //Metode der annullerer oprettelsen
         private void Cancel(object sender, RoutedEventArgs e)
         {
+            //Navigerer tilbage til login siden
             NavigationService.Navigate(new Login());
         }
     }

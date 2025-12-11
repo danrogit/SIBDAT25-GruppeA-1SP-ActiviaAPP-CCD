@@ -17,7 +17,7 @@ namespace ActiviaAPP
         {
             InitializeComponent();
 
-            //Bind lister til UI
+            //Binder lister til UI'et
             ActivityListBox.ItemsSource = ActivityStore.activities;
             userList.ItemsSource = UserStore.RegisteredUsers;
         }
@@ -25,8 +25,10 @@ namespace ActiviaAPP
         //Metode til at tilføje en aktivitet
         private void addActivity(object sender, RoutedEventArgs e)
         {
-            //Åbn popup vindue
+            //Instantiering af CreateActivity popup/klassen
             CreateActivity createActivity = new CreateActivity();
+
+            //Åbner dialogen
             bool? result = createActivity.ShowDialog();
 
             //Hvis brugeren trykkede OK
@@ -51,6 +53,7 @@ namespace ActiviaAPP
             //Hent den valgte aktivitet
             ActivityClass selected = ActivityListBox.SelectedItem as ActivityClass;
             
+            //Hvis der intet er valgt:
             if (selected == null)
             {
                 MessageBox.Show("Vælg en aktivitet først");
@@ -62,7 +65,8 @@ namespace ActiviaAPP
                                                        "Bekræft", 
                                                        MessageBoxButton.YesNo, 
                                                        MessageBoxImage.Question);
-            
+
+            //Hvis ja, slet aktiviteten
             if (confirm == MessageBoxResult.Yes)
             {
                 ActivityStore.activities.Remove(selected);
@@ -71,7 +75,6 @@ namespace ActiviaAPP
         }
        
         //Denne kode er genereret ved hjælp af AI-værktøj, da vi har begrænset erfaring med denne type implementering 
-
         //Metode til at indlæse brugere fra CSV
         private void adminSettings(object sender, RoutedEventArgs e)
         {
@@ -102,8 +105,8 @@ namespace ActiviaAPP
                 }
             }
         }
-        //Denne kode er genereret ved hjælp af AI-værktøj, da vi har begrænset erfaring med denne type implementering 
 
+        //Denne kode er genereret ved hjælp af AI-værktøj, da vi har begrænset erfaring med denne type implementering 
         //Metode til at uploade aktiviteter fra CSV
         private void UploadActivities(object sender, RoutedEventArgs e)
         {
@@ -117,8 +120,8 @@ namespace ActiviaAPP
             {
                 return;
             }
-            //Denne kode er genereret ved hjælp af AI-værktøj, da vi har begrænset erfaring med denne type implementering 
 
+            //Denne kode er genereret ved hjælp af AI-værktøj, da vi har begrænset erfaring med denne type implementering 
             try
             {
                 //Læs alle linjer fra filen
@@ -275,9 +278,10 @@ namespace ActiviaAPP
         //Metode til at åbne aktivitetsdetaljer
         private void OpenActivity(object sender, RoutedEventArgs e)
         {
-            //Hent den valgte aktivitet
+            //Hent den valgte aktivitet på liste fra UI'et
             ActivityClass selected = ActivityListBox.SelectedItem as ActivityClass;
-            
+
+            //Hvis der intet er valgt:
             if (selected == null)
             {
                 MessageBox.Show("Vælg en aktivitet først");
@@ -286,7 +290,8 @@ namespace ActiviaAPP
 
             //Opret dialog
             ActivityDetails dlg = new ActivityDetails(selected, "admin");
-            
+
+            //Denne kode er genereret ved hjælp af AI-værktøj, da vi har begrænset erfaring med denne type implementering 
             Window parentWindow = Window.GetWindow(this);
             if (parentWindow != null)
             {
@@ -296,31 +301,36 @@ namespace ActiviaAPP
             dlg.ShowDialog();
         }
 
+        //Metode til at åbne aktivitetsdetaljer
         private void ActivityListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             OpenActivity(sender, e);
         }
 
+        //Metode til at logge ud
         private void logOut(object sender, RoutedEventArgs e)
         {
+            //Navigeres til login siden
             NavigationService.Navigate(new Login());
         }
 
         //Metode til at slette en bruger
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //Hent valgt bruger
+            //Hent valgt bruger fra listen
             Classes.User selectedUser = userList.SelectedItem as Classes.User;
 
+            //Hvis ingen bruger er valgt:
             if (selectedUser == null)
             {
                 MessageBox.Show("Vælg et medlem først");
                 return;
             }
 
-            //Slet brugeren
+            //Hvis der er valgt en bruger, slettes denne efter bekræftelse
             UserStore.RegisteredUsers.Remove(selectedUser);
 
+            //Besked om bekræftelse af sletning
             MessageBox.Show("Brugeren '" + selectedUser.FullName + "' er blevet slettet");
         }
     }
