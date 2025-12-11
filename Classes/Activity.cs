@@ -1,69 +1,90 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Animation;
 
 namespace ActiviaAPP.Classes
 {
-    //Kodet af Camilla
+    //////Kodet af Camilla
     public class ActivityClass
     {
-        // Public attributter som bruges i UI og når aktiviteter oprettes
-        public string ActivityTitle { get; set; } = string.Empty; 
-        public string ActivityType { get; set; } = string.Empty;  
-        public string Description { get; set; } = string.Empty;
-
-        // Max antal deltagere (0 = ingen begrænsning)
-        public int MaxParticipants { get; set; }                  
-        public DateTime Date { get; set; }                        
-        public string CoverImagePath { get; set; } = string.Empty;
-        
-        //Get set for hvor mange der er tilmeldt aktiviteten
+        //Attributter for aktiviteten - ændret til properties for databinding
+        public string ActivityTitle { get; set; }
+        public string ActivityType { get; set; }
+        public string Description { get; set; }
+        public int MaxParticipants { get; set; }
+        public DateTime Date { get; set; }
         public int CurrentParticipantCount { get; set; }
-       
-        //Liste over brugere der er tilmeldt aktiviteten, ObservableCollection gør det muligt for UI at opdatere sig selv automatisk
-        public ObservableCollection<string> RegisteredUsers { get; } = new ObservableCollection<string>();        
+        public ObservableCollection<string> RegisteredUsers { get; set; }
 
-        //Public metode til at tilmelde en bruger til aktiviteten
+        //Constructor - initialiserer alle attributter med standardværdier
+        public ActivityClass()
+        {
+            ActivityTitle = "";
+            ActivityType = "";
+            Description = "";
+            MaxParticipants = 0;
+            Date = DateTime.Now;
+            CurrentParticipantCount = 0;
+            RegisteredUsers = new ObservableCollection<string>();
+        }
+
+        //Metode til at tilmelde en bruger til aktiviteten
         public bool Register(string userID)
         {
-            //Hvis userID er tomt eller null, returneres false
-            if (string.IsNullOrWhiteSpace(userID))
+            //Tjek om userID er tom
+            if (userID == null || userID == "")
+            {
                 return false;
+            }
 
-            //Hvis brugeren allerede findes i listen over tilmeldte brugere, returneres false
-            if (RegisteredUsers.Contains(userID))
+            //Tjek om brugeren allerede er tilmeldt
+            bool alreadyRegistered = false;
+            for (int i = 0; i < RegisteredUsers.Count; i++)
+            {
+                if (RegisteredUsers[i] == userID)
+                {
+                    alreadyRegistered = true;
+                    break;
+                }
+            }
+            
+            if (alreadyRegistered)
+            {
                 return false;
+            }
 
-            //Hvis alle pladser er optaget på aktiviteten, returneres false
-            if (MaxParticipants > 0 && RegisteredUsers.Count >= MaxParticipants)
-                return false;
+            //Tjek om aktiviteten er fuld
+            if (MaxParticipants > 0)
+            {
+                if (RegisteredUsers.Count >= MaxParticipants)
+                {
+                    return false;
+                }
+            }
 
-            //Tilføjer brugeren til listen over tilmeldte
+            //Tilføj brugeren til listen
             RegisteredUsers.Add(userID);
             return true;
         }
 
-        //Public metode til at afmelde en bruger fra aktiviteten
+        //Metode til at afmelde en bruger fra aktiviteten
         public bool Unregister(string userID)
         {
-            //Hvis userID er tomt eller null, returneres false
-            if (string.IsNullOrWhiteSpace(userID))
+            //Tjek om userID er tom
+            if (userID == null || userID == "")
+            {
                 return false;
+            }
 
-            //Hvis brugeren findes, fjernes den fra listen over tilmeldte
-            return RegisteredUsers.Remove(userID);
+            //Fjern brugeren fra listen
+            bool removed = RegisteredUsers.Remove(userID);
+            return removed;
         }
 
-        //Override to ToString, der viser titel og dato i formatet dd-MM-yyyy
+        //Metode der returnerer aktivitetens information som en string
         public override string ToString()
         {
-            //Viser titel og dato i formatet dd-MM-yyyy
-            return $"{ActivityTitle} ({Date:dd-MM-yyyy})";
+            string dateString = Date.ToString("dd-MM-yyyy");
+            return ActivityTitle + " (" + dateString + ")";
         }
     }
 }

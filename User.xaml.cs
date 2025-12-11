@@ -1,6 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using ActiviaAPP.Classes;
@@ -8,153 +6,152 @@ using ActiviaAPP.Popups;
 
 namespace ActiviaAPP
 {
-    //Kodet af Daniel og Camilla
-    //Partial class user, partial tillader os at dele klassen i flere filer
-    public partial class User : Page, INotifyPropertyChanged
+    //////Kodet af Daniel og Camilla
+    public partial class User : Page
     {
-        //Attributter
-        private string? _username;
-        
-        //Denne string behøves ingen værdi, grundet "?"
-        public string? username
-        {
-            //Get og set username for et medlem
-            get => _username;
-            set
-            {
-                //Hvis brugernavn er forskelligt fra den nuværende værdi, opdateres den og OnPropertyChanged kaldes
-                if (_username != value)
-                {
-                    //Username bliver sat til den nye værdi
-                    _username = value;
+        //Attributter for brugeren - ændret til properties for databinding
+        public string username { get; set; }
+        public string userPassword { get; set; }
+        public string userFullName { get; set; }
+        public string userMail { get; set; }
+        public int userPhone { get; set; }
 
-                    //Informerer UI om at værdien er ændret "Username"
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        //Attributter for bruger information
-        public string? userPassword;
-        public string? userFullName;
-        public string? userMail;
-        public int userPhone;
-
-        //Kontruktør for User klassen
+        //Constructor
         public User()
         {
             InitializeComponent();
 
-            //Binder kode og XAML med hinanden, så de begge bliver opdateret
-            DataContext = this; 
+            //Initialiser attributter
+            username = "";
+            userPassword = "";
+            userFullName = "";
+            userMail = "";
+            userPhone = 0;
             
-            //Binder aktivitetslisten "ActivityStore" med aktivitetslisten hos medlem
-            UserListbox.ItemsSource = ActivityStore.activities;            
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        //Protected virtual metode til at informere UI om ændringer i properties (virtual tillader override i nedarvede klasser)
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            //Kalder PropertyChanged hvis den ikke er null, og sender navnet på den ændrede property
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            //Sæt DataContext så databinding virker
+            DataContext = this;
+            
+            //Bind aktivitetslisten til UI
+            UserListbox.ItemsSource = ActivityStore.activities;
         }
 
         //Metode til at logge ud
         private void logOut(object sender, RoutedEventArgs e)
         {
-            //Navigerer tilbage til login siden
-            NavigationService?.Navigate(new Login());
+            NavigationService.Navigate(new Login());
         }
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            //Tom metode
         }
 
+        //Metode der kaldes ved dobbeltklik på aktivitet
         private void UserListbox_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            //Kalder metode der åbner den valgte aktivitets detaljer
             OpenSelectedActivityDetails();
         }
 
+        //Metode der kaldes ved klik på "Åbn aktivitet" knap
         private void OpenActivity(object sender, RoutedEventArgs e)
         {
-            
             OpenSelectedActivityDetails();
         }
 
-        //Metode til at åbne detaljer for den valgte aktivitet
+        //Metode til at åbne aktivitets detaljer
         private void OpenSelectedActivityDetails()
         {
-            //Henter den valgte aktivitet fra listen, som er af typen ActivityClass
-            var activity = UserListbox.SelectedItem as ActivityClass;
+            //Hent den valgte aktivitet
+            ActivityClass activity = UserListbox.SelectedItem as ActivityClass;
 
-            //If-sætning hvis ingen aktivitiet er valgt
+            //Tjek om der er valgt en aktivitet
             if (activity == null)
             {
-                //Popup vindue der fortæller at der skal vælges en aktivitet
                 MessageBox.Show("Vælg en aktivitet først");
                 return;
             }
 
-            //Hvis username er tom eller kun indeholder mellemrum, bruges userFullName i stedet
-            var userId = string.IsNullOrWhiteSpace(username) ? userFullName : username;
+            //Find bruger ID
+            string userId = username;
+            if (userId == "" || userId == null)
+            {
+                userId = userFullName;
+            }
+            if (userId == null)
+            {
+                userId = "";
+            }
 
-            //Viser aktivitetsdetaljer i et nyt vindue med bruger ID
-            var dlg = new ActivityDetails(activity, userId ?? string.Empty);
-
-            //Viser dialog vindue
+            //Åbn dialog vindue
+            ActivityDetails dlg = new ActivityDetails(activity, userId);
             dlg.ShowDialog();
         }
 
         //Metode til at tilmelde sig en aktivitet
         private void SignUpActivity(object sender, RoutedEventArgs e) 
         {
-            //Henter den valgte aktivitet fra listen, som er af typen ActivityClass
-            var activity = UserListbox.SelectedItem as ActivityClass;
+            //Hent den valgte aktivitet
+            ActivityClass activity = UserListbox.SelectedItem as ActivityClass;
 
-           //If-sætning i tilfælde af at ingen aktivitet er valgt
+            //Tjek om der er valgt en aktivitet
             if (activity == null)
             {
-                //Popup vindue som fortæller at medlem skal vælge en aktivitet
                 MessageBox.Show("Vælg en aktivitet");
                 return;
             }
 
-            var userID = string.IsNullOrWhiteSpace(username) ? userFullName : username;
-            
-            //If-sætning i tilfælde af at medlem intet brugernavn "userID" har
-            if (string.IsNullOrWhiteSpace(userID))
+            //Find bruger ID
+            string userID = username;
+            if (userID == "" || userID == null)
             {
-                MessageBox.Show("Angiv dit brugernavn"); 
+                userID = userFullName;
+            }
+
+            //Tjek om bruger ID er tomt
+            if (userID == "" || userID == null)
+            {
+                MessageBox.Show("Angiv dit brugernavn");
                 return;
             }
 
-            var success = activity.Register(userID);
+            //Forsøg at tilmelde brugeren
+            bool success = activity.Register(userID);
 
-            //If-sætning når medlem er succesfuldt tilmeldt en aktivitet
+            //Hvis tilmelding lykkedes
             if (success)
             {
-                //Popup vindue der fortæller medlem at de er tilmeldt aktiviteten
-                MessageBox.Show($"Du er tilmeldt: {activity.ActivityTitle}");
+                MessageBox.Show("Du er tilmeldt: " + activity.ActivityTitle);
             }
             else
             {
-               //If-sætning i tilfælde af, at medlem allerede er tilmeldt aktiviteten
-                if (activity.RegisteredUsers.Contains(userID))
+                //Tjek hvorfor det fejlede
+                
+                //Tjek om brugeren allerede er tilmeldt
+                bool alreadyRegistered = false;
+                for (int i = 0; i < activity.RegisteredUsers.Count; i++)
+                {
+                    if (activity.RegisteredUsers[i] == userID)
+                    {
+                        alreadyRegistered = true;
+                        break;
+                    }
+                }
+
+                if (alreadyRegistered)
+                {
                     MessageBox.Show("Du er allerede tilmeldt denne aktivitet");
-
-                //Else if-sætning i tilfælde af max antal deltagere
-                else if (activity.MaxParticipants > 0 && activity.CurrentParticipantCount >= activity.MaxParticipants)
-                    MessageBox.Show("Aktiviten er fuld");
-
-                //Else-sætning der melder fejl og at medlem ikke kunne tilmelde sig aktiviteten
+                }
+                //Tjek om aktiviteten er fuld
+                else if (activity.MaxParticipants > 0 && activity.RegisteredUsers.Count >= activity.MaxParticipants)
+                {
+                    MessageBox.Show("Aktiviteten er fuld");
+                }
+                //Anden fejl
                 else
-                    MessageBox.Show("Beklager, der skete en fejl"); 
+                {
+                    MessageBox.Show("Beklager, der skete en fejl");
+                }
             }
-
         }
     }
 }

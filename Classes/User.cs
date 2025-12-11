@@ -7,21 +7,31 @@ using System.Threading.Tasks;
 
 namespace ActiviaAPP.Classes
 {
-    //Kodet af alle
+    //////Kodet af alle
     public class User
     {
-        //Brugerens oplysninger, som bliver sat ved oprettelse af bruger, er tom som standard
-        public string Username { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
-        public string FullName { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string Phone { get; set; } = string.Empty;
+        //Attributter - ændret til properties for databinding
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string FullName { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
         
-        public override string ToString()
+        //Constructor - initialiserer alle attributter med tomme strenge
+        public User()
         {
-            //Returnerer brugerens fulde navn og brugernavn i en læsbar form
-            return $"{FullName} ({Username})";
+            Username = "";
+            Password = "";
+            FullName = "";
+            Email = "";
+            Phone = "";
         }
 
+        //Metode der returnerer brugerens information som en string
+        public override string ToString()
+        {
+            //Returnerer brugerens fulde navn og brugernavn
+            return FullName + " (" + Username + ")";
+        }
     }
 }
