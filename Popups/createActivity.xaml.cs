@@ -6,14 +6,14 @@ namespace ActiviaAPP.Popups
 {
     public partial class CreateActivity : Window
     {
-        //Attributter som bruges til at sende data tilbage
+        //Attributter
         public string ActivityTitle;
         public string ActivityType;
         public DateTime ActivityDate;
         public string ActivityDescription;
         public int MaxParticipants;
 
-        //Constructor
+        //Constructor der initialiserer komponenterne
         public CreateActivity()
         {
             InitializeComponent();
@@ -29,6 +29,7 @@ namespace ActiviaAPP.Popups
         //Metode til at opdatere slider værdi
         private void participantValue(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            //Opdaterer tekstboksen med slider værdien
             if (ParticipantValue != null)
             {
                 int value = (int)ParticipantSlider.Value;
@@ -39,56 +40,77 @@ namespace ActiviaAPP.Popups
         //Metode til at oprette aktivitet
         private void createClick(object sender, RoutedEventArgs e)
         {
-            //Tjek om titel er udfyldt
+            //String der angiver titel ud fra tekstboksen
             string titleText = TitleBox.Text;
+
+            //Hvis titel ikke er udfyldt:
             if (titleText == null || titleText == "")
             {
-                MessageBox.Show("Alle felter skal udfyldes");
-                return;
-            }
-            
-            //Tjek om type er valgt
-            object selectedItemObj = TypeBox.SelectedItem;
-            if (selectedItemObj == null)
-            {
-                MessageBox.Show("Alle felter skal udfyldes");
-                return;
-            }
-            
-            //Tjek om dato er valgt
-            DateTime? selectedDateNullable = DateBox.SelectedDate;
-            if (selectedDateNullable == null)
-            {
-                MessageBox.Show("Alle felter skal udfyldes");
-                return;
-            }
-            
-            //Tjek om beskrivelse er udfyldt
-            string descriptionText = DescriptionBox.Text;
-            if (descriptionText == null || descriptionText == "")
-            {
+                //Vises en besked
                 MessageBox.Show("Alle felter skal udfyldes");
                 return;
             }
 
+            //Angiver hvilken type af aktivitet der er valgt ud fra dropdown
+            object selectedItemObj = TypeBox.SelectedItem;
+
+            //Hvis ingen type er valgt:
+            if (selectedItemObj == null)
+            {
+                //Vises en besked
+                MessageBox.Show("Alle felter skal udfyldes");
+                return;
+            }
+
+            //Angiver hvilken dato der er valgt ud fra DatePicker
+            DateTime? selectedDateNullable = DateBox.SelectedDate;
+
+            //Hvis ingen dato er valgt:
+            if (selectedDateNullable == null)
+            {
+                //Vises en besked
+                MessageBox.Show("Alle felter skal udfyldes");
+                return;
+            }
+
+            //Angiver beskrivelsen ud fra tekstboksen
+            string descriptionText = DescriptionBox.Text;
+
+            //Hvis beskrivelse ikke er udfyldt:
+            if (descriptionText == null || descriptionText == "")
+            {
+                //Vises en besked
+                MessageBox.Show("Alle felter skal udfyldes");
+                return;
+            }
+           
             //Hent værdier fra UI
             ActivityTitle = titleText;
             
             //Hent valgt type
             ComboBoxItem selectedItem = selectedItemObj as ComboBoxItem;
+
+            //Sæt ActivityType baseret på valgt item
             if (selectedItem != null)
             {
+                //Hent indholdet af det valgte item
                 object content = selectedItem.Content;
+
+                //Hvis ikke at content er null, konverter til string og sæt ActivityType
                 if (content != null)
                 {
+                    //String til konvertering
                     string contentString = content.ToString();
+
+                    //Hvis ikke null, sæt ActivityType
                     if (contentString != null)
                     {
                         ActivityType = contentString;
                     }
                 }
             }
-            
+
+            //Sikrer at ActivityType ikke er null, ved at sætte til tom string
             if (ActivityType == null || ActivityType == "")
             {
                 ActivityType = "";
@@ -96,18 +118,23 @@ namespace ActiviaAPP.Popups
             
             //Hent valgt dato
             DateTime selectedDate = selectedDateNullable.Value;
+
+            //Sætter ActivityDate
             ActivityDate = selectedDate;
-            
+
+            //Hent beskrivelse
             ActivityDescription = descriptionText;
+
+            //Hent max deltagere fra slider
             MaxParticipants = (int)ParticipantSlider.Value;
 
-            //Bekræft oprettelse
+            //Bekræftelse på oprettelse af aktivitet
             MessageBox.Show("Aktivitet blev oprettet");
             this.DialogResult = true;
             this.Close();
         }
 
-        //Metode til at annullere
+        //Metode til at annullere opretelse af aktivitet
         private void cancelClick(object sender, RoutedEventArgs e)
         {
             this.DialogResult = false;

@@ -18,13 +18,14 @@ namespace ActiviaAPP
         //Metode der håndterer login
         private void logIn(object sender, RoutedEventArgs e)
         {
-            //Hent brugernavn og password fra tekstfelterne
+            //Henter brugernavn og password fra tekstfelterne
             string user = UsernameBox.Text;
             string pass = PasswordBox.Password;
 
-            //Tjek om felterne er tomme
+            //Hvis felterne er tomme:
             if (user == "" || pass == "")
             {
+                //Vises en besked
                 MessageBox.Show("Indtast brugernavn og adgangskode");
                 return;
             }
@@ -32,17 +33,18 @@ namespace ActiviaAPP
             //Hardcoded admin login til demo
             if (user == "admin" && pass == "1")
             {
+                //Navigeres til Admin siden
                 NavigationService.Navigate(new Admin());
                 return;
             }
 
-            //Søg efter bruger i listen - RETTET: Brug Classes.User
+            //Søger efter bruger i UserStore, og gemmer derefter brugeren i foundUser
             Classes.User foundUser = UserStore.FindUser(user, pass);
 
-            //Hvis bruger findes, log ind
+            //Hvis brugeren findes, log ind
             if (foundUser != null)
             {
-                //Opret User page (ikke Classes.User!)
+                //Opret User page
                 User userPage = new User();
                 userPage.username = foundUser.Username;
                 userPage.userFullName = foundUser.FullName;
@@ -53,21 +55,24 @@ namespace ActiviaAPP
                 int.TryParse(foundUser.Phone, out phoneNumber);
                 userPage.userPhone = phoneNumber;
 
+                //Navigeres til User page
                 NavigationService.Navigate(userPage);
                 return;
             }
 
-            //Hardcoded bruger login til demo
+            //Hardcoded bruger-login til demo
             if (user == "user" && pass == "1")
             {
+                //Navigeres til User siden
                 NavigationService.Navigate(new User());
                 return;
             }
 
-            //Hvis login fejler
+            //Hvis login fejler:
             MessageBox.Show("Forkert brugernavn eller adgangskode");
         }
 
+        //Denne kode er genereret ved hjælp af AI-værktøj, da vi har begrænset erfaring med denne type implementering
         //Metode til at uploade brugere fra CSV fil
         private void UploadCsv(object sender, RoutedEventArgs e)
         {

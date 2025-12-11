@@ -25,7 +25,7 @@ namespace ActiviaAPP
         {
             InitializeComponent();
 
-            // Laver startsiden om til login
+            //Henter login-siden fra opstart
             MainFrame.Navigate(new Login());
         }
     }

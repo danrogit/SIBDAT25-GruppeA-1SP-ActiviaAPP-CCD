@@ -10,25 +10,26 @@ namespace ActiviaAPP.Classes
         //Liste over alle registrerede brugere
         public static ObservableCollection<User> RegisteredUsers = new ObservableCollection<User>();
 
-        //Metode til at finde en bruger ved login - RETTET: Return type kan være null
+        //Metode til at finde en bruger baseret på brugernavn og password, til login
         public static User FindUser(string username, string password)
         {
-            //Loop gennem alle brugere
+            //For loop gennem alle brugere
             for (int i = 0; i < RegisteredUsers.Count; i++)
             {
                 User user = RegisteredUsers[i];
 
-                //Sammenlign brugernavn og password (ignorer store/små bogstaver i brugernavn)
+                //Sammenlign brugernavn og password, der ignoreres store og små bogstaver i brugernavn
                 string usernameLower = user.Username.ToLower();
                 string inputUsernameLower = username.ToLower();
 
+                //Hvis både brugernavn og password matcher, returner brugeren
                 if (usernameLower == inputUsernameLower && user.Password == password)
                 {
                     return user;
                 }
             }
-            
-            //Ingen bruger fundet - return null er OK her
+
+            //Hvis ingen bruger blev fundet, returneres null
             return null;
         }
 
@@ -38,22 +39,25 @@ namespace ActiviaAPP.Classes
             //Loop gennem alle brugere
             for (int i = 0; i < RegisteredUsers.Count; i++)
             {
+                //Sammenlign brugernavne, ignorer store og små bogstaver
                 string existingUsername = RegisteredUsers[i].Username.ToLower();
                 string inputUsername = username.ToLower();
 
+                //Hvis brugernavnet findes, returneres true
                 if (existingUsername == inputUsername)
                 {
                     return true;
                 }
             }
-            
+
+            //Hvis brugernavnet ikke findes, returneres false
             return false;
         }
 
         //Metode til at registrere en ny bruger
         public static bool RegisterUser(User user)
         {
-            //Tjek om brugernavnet allerede eksisterer
+            //Hvis brugernavn allerede eksiterer, returneres false
             if (UsernameExists(user.Username))
             {
                 return false;
@@ -64,6 +68,7 @@ namespace ActiviaAPP.Classes
             return true;
         }
 
+        //Denne kode er genereret ved hjælp af AI-værktøj, da vi har begrænset erfaring med denne type implementering
         //Metode til at indlæse brugere fra en CSV fil
         public static void LoadFromCsv(string filePath)
         {
