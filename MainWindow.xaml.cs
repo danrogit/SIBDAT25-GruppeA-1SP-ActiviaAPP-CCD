@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ActiviaAPP.Classes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,8 +11,8 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Windows.Navigation;
+using System.Windows.Shapes;
 
 namespace ActiviaAPP
 {
@@ -26,7 +27,6 @@ namespace ActiviaAPP
 
             // Laver startsiden om til login
             MainFrame.Navigate(new Login());
-
         }
     }
 }

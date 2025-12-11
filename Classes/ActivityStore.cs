@@ -10,6 +10,7 @@ namespace ActiviaAPP.Classes
     internal class ActivityStore
     {
         //Static/delt liste-objekt for oprettede aktiviteter, som kan tilgås fra både Admin og User
-        public static ObservableCollection<ActivityClass> activities { get; } = new ObservableCollection<ActivityClass>();
+        public static ObservableCollection<ActivityClass> activities { get; } = new ObservableCollection<ActivityClass>();       
+       
     }
 }

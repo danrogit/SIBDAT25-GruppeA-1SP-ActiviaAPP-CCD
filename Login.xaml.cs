@@ -28,29 +28,33 @@ namespace ActiviaAPP
 
         private void logIn(object sender, RoutedEventArgs e)
         {
+            //Hent brugernavn og kode fra inputfelterne
             string user = UsernameBox.Text;
             string pass = PasswordBox.Password;
 
-            // Valider at brugernavn og kode er udfyldt
+            // Tjekker om brugernavn eller adgangskode mangler
             if (string.IsNullOrWhiteSpace(user) || string.IsNullOrWhiteSpace(pass))
             {
+                //Hvis et af felterne er tomme, vises denne besked og stoppes login processen
                 MessageBox.Show("Indtast brugernavn og adgangskode");
                 return;
             }
 
-            // Demo admin-login (hardcoded)
+            //Hardcoded admin-login til brug af demo
             if (user == "admin" && pass == "1")
             {
-                // Gå videre til admin-siden
+                // Admin logges ind og navigeres til Admin-siden
                 NavigationService?.Navigate(new Admin());
                 return;
             }
 
-            // Forsøg at finde en oprettet bruger i UserStore
+            // Forsøger at finde en oprettet bruger i UserStore
             var foundUser = UserStore.FindUser(user, pass);
+
+            // Hvis brugeren findes, navigeres brugeren til User-siden
             if (foundUser != null)
             {
-                // Opret User-side og sæt brugerdata før navigation
+                // Opretter User-side og sætter brugerens data før navigation
                 var userPage = new User
                 {
                     username = foundUser.Username,
@@ -58,47 +62,59 @@ namespace ActiviaAPP
                     userMail = foundUser.Email,
                     userPhone = int.TryParse(foundUser.Phone, out int phone) ? phone : 0
                 };
+
+                // Navigerer til User-siden med brugerdata
                 NavigationService?.Navigate(userPage);
                 return;
             }
 
-            // Demo almindelig user-login (hardcoded)
+            //Hardcoded user-login til brug af demo
             else if (user == "user" && pass == "1")
             {
-                // Gå videre til user-siden
+                // Går videre til user-siden
                 NavigationService?.Navigate(new User());
                 return;
             }
+
+            //Hvis der ikke findes en bruger med de indtastede værdier:
             else
             {
-                // Forkert credentials
+                // Fejlbesked vises
                 MessageBox.Show("Forkert brugernavn eller adgangskode");
             }
         }
 
-        // Håndter "Upload CSV"-knap: åbner filvælger og kalder UserStore.LoadFromCsv
+        // Håndter "Upload CSV"-knappens klik for at indlæse brugere fra en CSV-fil
         private void UploadCsv(object sender, RoutedEventArgs e)
         {
+            // Opret og konfigurer OpenFileDialog
             var openFileDialog = new OpenFileDialog
             {
+                //Udvalg af filtyper og dialogtitel
                 Filter = "CSV filer (*.csv)|*.csv|Alle filer (*.*)|*.*",
                 Title = "Vælg en CSV fil med brugere"
             };
 
+            // Viser dialogen og tjekker om brugeren valgte en fil
             if (openFileDialog.ShowDialog() == true)
             {
+                // Forsøger at indlæse brugere fra den valgte fil
                 try
                 {
                     // Indlæs brugere fra den valgte fil
                     UserStore.LoadFromCsv(openFileDialog.FileName);
+
+                    // Viser succesbesked med antal indlæste brugere
                     MessageBox.Show($"Brugere er blevet indlæst fra filen!\n\nAntal brugere: {UserStore.RegisteredUsers.Count}", 
                                     "Success", 
                                     MessageBoxButton.OK, 
                                     MessageBoxImage.Information);
                 }
+
+                // Håndterer eventuelle fejl under indlæsning
                 catch (Exception ex)
                 {
-                    // Vis fejl ved indlæsning
+                    // Viser fejl ved mislykket indlæsning
                     MessageBox.Show($"Kunne ikke indlæse CSV filen:\n{ex.Message}", 
                                     "Fejl", 
                                     MessageBoxButton.OK, 
