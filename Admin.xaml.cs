@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -13,29 +12,14 @@ namespace ActiviaAPP
 {
     public partial class Admin : Page
     {
-        //Attributter til admin
-        public string adminName;
-        public string adminPassword;
-        public string adminCompany;
-
         //Constructor
         public Admin()
         {
             InitializeComponent();
 
-            //Initialiser attributter
-            adminName = "";
-            adminPassword = "";
-            adminCompany = "";
-
             //Bind lister til UI
             ActivityListBox.ItemsSource = ActivityStore.activities;
             userList.ItemsSource = UserStore.RegisteredUsers;
-        }
-
-        private void activityList(object sender, SelectionChangedEventArgs e)
-        {
-            //Tom metode - kan bruges senere
         }
 
         //Metode til at tilføje en aktivitet
@@ -64,9 +48,8 @@ namespace ActiviaAPP
         //Metode til at fjerne en aktivitet
         private void removeActivity(object sender, RoutedEventArgs e)
         {
-            //Hent den valgte aktivitet - RETTET: Explicit null check
-            object selectedObj = ActivityListBox.SelectedItem;
-            ActivityClass selected = selectedObj as ActivityClass;
+            //Hent den valgte aktivitet
+            ActivityClass selected = ActivityListBox.SelectedItem as ActivityClass;
             
             if (selected == null)
             {
@@ -150,7 +133,7 @@ namespace ActiviaAPP
                     string line = lines[i];
                     
                     //Spring tomme linjer over
-                    if (line == null || line == "")
+                    if (line == "")
                     {
                         continue;
                     }
@@ -216,7 +199,7 @@ namespace ActiviaAPP
                     }
 
                     //Spring over hvis titel er tom
-                    if (title == null || title == "")
+                    if (title == "")
                     {
                         continue;
                     }
@@ -231,7 +214,7 @@ namespace ActiviaAPP
 
                     //Parse nuværende deltagere
                     int currentParticipants = 0;
-                    if (currentStr != null && currentStr != "")
+                    if (currentStr != "")
                     {
                         int.TryParse(currentStr, out currentParticipants);
                     }
@@ -292,9 +275,8 @@ namespace ActiviaAPP
         //Metode til at åbne aktivitetsdetaljer
         private void OpenActivity(object sender, RoutedEventArgs e)
         {
-            //RETTET: Explicit null check
-            object selectedObj = ActivityListBox.SelectedItem;
-            ActivityClass selected = selectedObj as ActivityClass;
+            //Hent den valgte aktivitet
+            ActivityClass selected = ActivityListBox.SelectedItem as ActivityClass;
             
             if (selected == null)
             {
@@ -324,17 +306,11 @@ namespace ActiviaAPP
             NavigationService.Navigate(new Login());
         }
 
-        private void userList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //Tom metode
-        }
-
         //Metode til at slette en bruger
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //Hent valgt bruger - RETTET: Explicit null check
-            object selectedObj = userList.SelectedItem;
-            Classes.User selectedUser = selectedObj as Classes.User;
+            //Hent valgt bruger
+            Classes.User selectedUser = userList.SelectedItem as Classes.User;
 
             if (selectedUser == null)
             {
