@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 
 namespace ActiviaAPP.Classes
 {
-    //////Kodet af alle
+    /// <summary>
+    /// Kodet af alle
+    /// </summary>
     public class User
     {
         //Attributter

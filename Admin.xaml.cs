@@ -10,6 +10,9 @@ using System.Text;
 
 namespace ActiviaAPP
 {
+    /// <summary>
+    /// Kodet af Camilla
+    /// </summary>
     public partial class Admin : Page
     {
         //Constructor
@@ -297,7 +300,7 @@ namespace ActiviaAPP
             {
                 dlg.Owner = parentWindow;
             }
-            
+
             dlg.ShowDialog();
         }
 

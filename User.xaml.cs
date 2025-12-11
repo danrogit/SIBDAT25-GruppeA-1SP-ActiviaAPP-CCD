@@ -6,7 +6,9 @@ using ActiviaAPP.Popups;
 
 namespace ActiviaAPP
 {
-    //////Kodet af Daniel og Camilla
+    /// <summary>
+    /// Kodet af Daniel og Camilla
+    /// </summary>
     public partial class User : Page
     {
         //Attributter

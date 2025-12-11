@@ -8,7 +8,11 @@ namespace ActiviaAPP
 {
     public partial class Login : Page
     {
-        //////Kodet af Daniel
+
+        /// <summary>
+        /// Kodet af Daniel
+        /// </summary>
+
         //Constructor
         public Login()
         {
@@ -33,7 +37,7 @@ namespace ActiviaAPP
             //Hardcoded admin login til demo
             if (user == "admin" && pass == "1")
             {
-                //Navigeres til Admin siden
+                //Navigerer til Admin-siden
                 NavigationService.Navigate(new Admin());
                 return;
             }
@@ -44,18 +48,18 @@ namespace ActiviaAPP
             //Hvis brugeren findes, log ind
             if (foundUser != null)
             {
-                //Opret User page
+                //Opret User-page
                 User userPage = new User();
                 userPage.username = foundUser.Username;
                 userPage.userFullName = foundUser.FullName;
                 userPage.userMail = foundUser.Email;
                 
-                //Konverter phone til int
+                //Konverter telefonnr. til int
                 int phoneNumber = 0;
                 int.TryParse(foundUser.Phone, out phoneNumber);
                 userPage.userPhone = phoneNumber;
 
-                //Navigeres til User page
+                //Navigerer til User-page
                 NavigationService.Navigate(userPage);
                 return;
             }
@@ -72,7 +76,7 @@ namespace ActiviaAPP
             MessageBox.Show("Forkert brugernavn eller adgangskode");
         }
 
-        //Denne kode er genereret ved hjælp af AI-værktøj, da vi har begrænset erfaring med denne type implementering
+        ////Denne kode er genereret ved hjælp af AI-værktøj, da vi har begrænset erfaring med denne type implementering
         //Metode til at uploade brugere fra CSV fil
         private void UploadCsv(object sender, RoutedEventArgs e)
         {
@@ -109,7 +113,7 @@ namespace ActiviaAPP
             }
         }
 
-        //Metode til at gå til signup side
+        //Metode til at gå til Signup-side
         private void GoToSignUp(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new SignUp());

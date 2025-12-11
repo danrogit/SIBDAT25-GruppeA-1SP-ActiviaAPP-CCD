@@ -6,6 +6,11 @@ namespace ActiviaAPP.Popups
 {
     public partial class CreateActivity : Window
     {
+
+        /// <summary>
+        /// Kodet af Casper
+        /// </summary>
+
         //Attributter
         public string ActivityTitle;
         public string ActivityType;
@@ -40,6 +45,7 @@ namespace ActiviaAPP.Popups
         //Metode til at oprette aktivitet
         private void createClick(object sender, RoutedEventArgs e)
         {
+
             //String der angiver titel ud fra tekstboksen
             string titleText = TitleBox.Text;
 
@@ -83,11 +89,13 @@ namespace ActiviaAPP.Popups
                 MessageBox.Show("Alle felter skal udfyldes");
                 return;
             }
-           
+
+
+
             //Hent værdier fra UI
             ActivityTitle = titleText;
             
-            //Hent valgt type
+            //Hent valgt type fra createActivity.xaml comboboxen 'Typebox'
             ComboBoxItem selectedItem = selectedItemObj as ComboBoxItem;
 
             //Sæt ActivityType baseret på valgt item
@@ -109,6 +117,8 @@ namespace ActiviaAPP.Popups
                     }
                 }
             }
+
+
 
             //Sikrer at ActivityType ikke er null, ved at sætte til tom string
             if (ActivityType == null || ActivityType == "")
@@ -134,6 +144,7 @@ namespace ActiviaAPP.Popups
             this.Close();
         }
 
+
         //Metode til at annullere opretelse af aktivitet
         private void cancelClick(object sender, RoutedEventArgs e)
         {
@@ -141,10 +152,6 @@ namespace ActiviaAPP.Popups
             this.Close();
         }
 
-        //Event handler for titel ændring
-        private void titleChange(object sender, TextChangedEventArgs e)
-        {
-            //Tom metode
-        }
+
     }
 }

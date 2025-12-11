@@ -2,7 +2,9 @@
 
 namespace ActiviaAPP.Classes
 {
-    //////Kodet af alle
+    /// <summary>
+    /// Kodet af alle
+    /// </summary>
     public class ActivityStore
     {
         //Static liste over alle aktiviteter - kan bruges af både Admin og User

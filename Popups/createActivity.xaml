@@ -63,8 +63,7 @@
                 <!-- Titel -->
                 <TextBlock Text="Titel" FontWeight="Bold" FontFamily="Poppins"/>
                 <TextBox x:Name="TitleBox" Margin="0,0,0,10" Height="28"
-                         FontFamily="Yu Gothic UI Semibold" BorderBrush="#FFC9D1DC" Background="#FFF2F5F9"
-                         TextChanged="titleChange"/>
+                         FontFamily="Yu Gothic UI Semibold" BorderBrush="#FFC9D1DC" Background="#FFF2F5F9"/>
 
                 <!-- Aktivitetstype (ComboBox med foruddefinerede kategorier) -->
                 <TextBlock Text="Aktivitetstype" FontWeight="Bold" FontFamily="Poppins"/>

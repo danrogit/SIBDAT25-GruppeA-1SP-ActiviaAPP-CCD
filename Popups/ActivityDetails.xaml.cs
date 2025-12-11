@@ -7,9 +7,15 @@ namespace ActiviaAPP.Popups
 {
     public partial class ActivityDetails : Window
     {
+
+        /// <summary>
+        /// Kodet af Daniel og Camilla
+        /// </summary>
+
         //Attributter
         private ActivityClass activity;
         private string userId;
+
 
         //Konstructor
         public ActivityDetails(ActivityClass activity, string currentUserId)
@@ -33,11 +39,13 @@ namespace ActiviaAPP.Popups
             activity.RegisteredUsers.CollectionChanged += RegisteredUsers_CollectionChanged;
         }
 
+
         //Metode der kaldes når RegisteredUsers listen ændres
         private void RegisteredUsers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            Dispatcher.Invoke(Populate);
+            Populate();
         }
+
 
         //Metode til at opdatere UI
         private void Populate()
@@ -151,6 +159,7 @@ namespace ActiviaAPP.Popups
             }
         }
 
+
         //Metode til tilmelding
         private void RegisterBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -180,8 +189,8 @@ namespace ActiviaAPP.Popups
                     MessageBox.Show("Du er afmeldt aktiviteten");
                 }
 
-                //Hvis brugeren ikke er tilmeldt
-            }
+
+            } //Hvis brugeren ikke er tilmeldt
             else
             {
                 //Hvis aktiviteten er fuld, vises besked og der afbrydes

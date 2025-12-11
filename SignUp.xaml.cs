@@ -5,7 +5,9 @@ using System.Windows.Controls;
 
 namespace ActiviaAPP
 {
-    //Kodet af Casper
+    /// <summary>
+    /// Kodet af Casper
+    /// </summary>
     public partial class SignUp : Page
     {
         //Constructor
@@ -25,10 +27,10 @@ namespace ActiviaAPP
             string password = PasswordBox.Password;
             string confirmPassword = ConfirmPasswordBox.Password;
 
-            //Hvis ikke alle fleter er udfyldt:
+            //Hvis ikke alle felter er udfyldt:
             if (fullName == "" || username == "" || email == "" || phone == "" || password == "" || confirmPassword == "")
             {
-                //Vises fejlmeddelelse
+                //Vises fejlmeddelelsen
                 MessageBox.Show("Udfyld alle felter");
                 return;
             }
@@ -36,7 +38,7 @@ namespace ActiviaAPP
             //Hvis ikke adgangskoderne matcher:
             if (password != confirmPassword)
             {
-                //Vises fejlmeddelelse
+                //Vises fejlmeddelelsen
                 MessageBox.Show("Adgangskoden matcher ikke");
                 return;
             }
@@ -44,7 +46,7 @@ namespace ActiviaAPP
             //Hvis brugernavnet allerede findes:
             if (UserStore.UsernameExists(username))
             {
-                //Vises fejlmeddelelse
+                //Vises fejlmeddelelsen
                 MessageBox.Show("Brugernavnet er allerede taget");
                 return;
             }
@@ -63,7 +65,7 @@ namespace ActiviaAPP
             //Hvis brugeren blev gemt korrekt:
             if (success)
             {
-                //Vises bekræftelsesmeddelelse
+                //Vises bekræftelsesmeddelelsen
                 MessageBox.Show(username + " blev oprettet. Du kan nu logge ind");
                 NavigationService.Navigate(new Login());
             }
@@ -71,7 +73,7 @@ namespace ActiviaAPP
             //Hvis brugeren ikke blev gemt korrekt:
             else
             {
-                //Vises fejlmeddelelse
+                //Vises fejlmeddelelsen
                 MessageBox.Show("Brugeren blev ikke oprettet, prøv igen");
             }
         }

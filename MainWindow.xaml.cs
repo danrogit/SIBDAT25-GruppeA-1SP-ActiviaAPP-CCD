@@ -18,14 +18,16 @@ namespace ActiviaAPP
 {
     public partial class MainWindow : Window
 
-    {   //Kodet af alle
+    {   /// <summary>
+        /// Kodet af alle
+        /// </summary>
 
         //Konstruktør for MainWindow klassen, der derved fra start automatisk kører login siden
         public MainWindow()
         {
             InitializeComponent();
 
-            //Henter login-siden fra opstart
+            // Henter login-siden fra opstart - default side på programmet
             MainFrame.Navigate(new Login());
         }
     }

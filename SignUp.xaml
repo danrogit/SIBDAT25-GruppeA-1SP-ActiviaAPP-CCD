@@ -5,7 +5,7 @@
 
     <Page.Resources>
 
-        <!-- 🔥 Orange Activia Button Style -->
+        <!-- Button styling -->
         <Style x:Key="OrangeButton" TargetType="Button">
             <Setter Property="Background" Value="#FFF95F20"/>
             <Setter Property="Foreground" Value="White"/>
@@ -45,7 +45,7 @@
 
     <Grid Background="#FFF7F9FC">
 
-        <!-- Centeret signup-boks -->
+        <!-- Centreret signup-boks -->
         <Border Width="400"
                 Padding="30"
                 Background="White"
