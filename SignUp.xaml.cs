@@ -1,76 +1,67 @@
 ﻿using ActiviaAPP.Classes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ActiviaAPP
 {
+    //Kodet af Casper
     public partial class SignUp : Page
     {
+        //Constructor
         public SignUp()
         {
             InitializeComponent();
         }
 
+        //Metode der opretter en ny bruger
         private void CreateUser(object sender, RoutedEventArgs e)
         {
-            // Tjekker om alle felter er udfyldt før man kan gå videre
-            if (string.IsNullOrWhiteSpace(FullNameBox.Text) ||
-                string.IsNullOrWhiteSpace(UsernameBox.Text) ||
-                string.IsNullOrWhiteSpace(EmailBox.Text) ||
-                string.IsNullOrWhiteSpace(PhoneBox.Text) ||
-                string.IsNullOrWhiteSpace(PasswordBox.Password) ||
-                string.IsNullOrWhiteSpace(ConfirmPasswordBox.Password))
+            //Hent værdier fra tekstfelterne
+            string fullName = FullNameBox.Text;
+            string username = UsernameBox.Text;
+            string email = EmailBox.Text;
+            string phone = PhoneBox.Text;
+            string password = PasswordBox.Password;
+            string confirmPassword = ConfirmPasswordBox.Password;
+
+            //Tjek om alle felter er udfyldt
+            if (fullName == "" || username == "" || email == "" || phone == "" || password == "" || confirmPassword == "")
             {
                 MessageBox.Show("Udfyld alle felter");
                 return;
             }
 
-            // Tjek om adgangskoderne matcher i oprettelsen
-            if (PasswordBox.Password != ConfirmPasswordBox.Password)
+            //Tjek om adgangskoderne matcher
+            if (password != confirmPassword)
             {
                 MessageBox.Show("Adgangskoden matcher ikke");
                 return;
             }
 
-
-            // Tjek om brugernavnet allerede findes
-            if (UserStore.UsernameExists(UsernameBox.Text))
+            //Tjek om brugernavnet allerede findes
+            if (UserStore.UsernameExists(username))
             {
                 MessageBox.Show("Brugernavnet er allerede taget");
                 return;
             }
 
+            //Opret ny bruger - RETTET: Brug Classes.User
+            Classes.User newUser = new Classes.User();
+            newUser.FullName = fullName;
+            newUser.Username = username;
+            newUser.Email = email;
+            newUser.Phone = phone;
+            newUser.Password = password;
 
-            // Opretter en ny bruger
-            var newUser = new ActiviaAPP.Classes.User
-            {
-                FullName = FullNameBox.Text,
-                Username = UsernameBox.Text,
-                Email = EmailBox.Text,
-                Phone = PhoneBox.Text,
-                Password = PasswordBox.Password
-            };
+            //Gem brugeren i UserStore
+            bool success = UserStore.RegisterUser(newUser);
 
-
-            // Gemmer brugeren i UserStore.cs filen
-            var success = UserStore.RegisterUser(newUser); 
+            //Hvis brugeren blev gemt korrekt
             if (success)
             {
-                MessageBox.Show($"{newUser.Username} blev oprettet. Du kan nu logge ind");
-
-                NavigationService?.Navigate(new Login());
+                MessageBox.Show(username + " blev oprettet. Du kan nu logge ind");
+                NavigationService.Navigate(new Login());
             }
             else
             {
@@ -78,10 +69,10 @@ namespace ActiviaAPP
             }
         }
 
+        //Metode der annullerer oprettelsen
         private void Cancel(object sender, RoutedEventArgs e)
         {
-            // Gå tilbage til login siden uden at gemme
-            NavigationService?.Navigate(new Login());
+            NavigationService.Navigate(new Login());
         }
     }
 }

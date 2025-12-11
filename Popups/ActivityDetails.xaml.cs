@@ -1,89 +1,105 @@
 ﻿using System;
-using System.Linq;
 using System.Windows;
-using System.Windows.Media.Imaging;
+using System.Collections.Specialized;
 using ActiviaAPP.Classes;
-using System.IO;
 
 namespace ActiviaAPP.Popups
 {
     public partial class ActivityDetails : Window
     {
-        private readonly ActivityClass activity;
-        private readonly string userId;
+        //Attributter
+        private ActivityClass activity;
+        private string userId;
 
+        //Constructor
         public ActivityDetails(ActivityClass activity, string currentUserId)
         {
             InitializeComponent();
 
-            // Gem de indkomne parametre og sørg for at activity ikke er null
-            this.activity = activity ?? throw new ArgumentNullException(nameof(activity));
-            this.userId = currentUserId ?? string.Empty;
+            //Gem aktivitet og bruger ID
+            this.activity = activity;
+            this.userId = currentUserId;
+            
+            //Hvis userId er null, sæt til tom string
+            if (this.userId == null)
+            {
+                this.userId = "";
+            }
 
-            // Initial population af UI med data fra activity
+            //Vis information
             Populate();
 
-            // Abonner på ændringer i RegisteredUsers så UI opdateres når tilmeldinger ændres
-            activity.RegisteredUsers.CollectionChanged += (s, e) => Dispatcher.Invoke(Populate);
+            //Lyt efter ændringer
+            activity.RegisteredUsers.CollectionChanged += RegisteredUsers_CollectionChanged;
         }
 
-        // Opdater UI-elementer med information fra activity
+        //Metode der kaldes når listen ændres - RETTET: Nullable sender parameter
+        private void RegisteredUsers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            Dispatcher.Invoke(Populate);
+        }
+
+        //Metode til at opdatere UI
         private void Populate()
         {
+            //Vis titel
             TitleText.Text = activity.ActivityTitle;
+            
+            //Vis beskrivelse
             DescriptionText.Text = activity.Description;
+            
+            //Vis dato
             DateText.Text = activity.Date.ToString("dd-MM-yyyy");
-            ParticipantsText.Text = $"{activity.CurrentParticipantCount}/{(activity.MaxParticipants > 0 ? activity.MaxParticipants.ToString() : "∞")}";
-            RegisteredList.Text = "Tilmeldte: " + (activity.RegisteredUsers.Count == 0 ? "Ingen" : string.Join(", ", activity.RegisteredUsers));
-
-            // Billedhåndtering: understøtter absolutte filstier, app-relativ sti og pack:// URIs
-            var path = activity.CoverImagePath ?? string.Empty;
-            BitmapImage? img = null;
-
-            try
+            
+            //Vis antal deltagere
+            string participantsText = activity.RegisteredUsers.Count.ToString();
+            participantsText = participantsText + "/";
+            
+            if (activity.MaxParticipants > 0)
             {
-                if (!string.IsNullOrWhiteSpace(path))
+                participantsText = participantsText + activity.MaxParticipants.ToString();
+            }
+            else
+            {
+                participantsText = participantsText + "∞";
+            }
+            
+            ParticipantsText.Text = participantsText;
+            
+            //Vis liste over tilmeldte
+            if (activity.RegisteredUsers.Count == 0)
+            {
+                RegisteredList.Text = "Tilmeldte: Ingen";
+            }
+            else
+            {
+                string registeredText = "Tilmeldte: ";
+                
+                for (int i = 0; i < activity.RegisteredUsers.Count; i++)
                 {
-                    // Hvis det er en absolut filsti på disk
-                    if (Path.IsPathRooted(path) && File.Exists(path))
+                    registeredText = registeredText + activity.RegisteredUsers[i];
+                    
+                    if (i < activity.RegisteredUsers.Count - 1)
                     {
-                        img = new BitmapImage();
-                        img.BeginInit();
-                        img.UriSource = new Uri(path, UriKind.Absolute);
-                        img.CacheOption = BitmapCacheOption.OnLoad;
-                        img.EndInit();
-                    }
-                    // Hvis det er en pack URI (resource embedded i applikationen)
-                    else if (path.StartsWith("pack://", StringComparison.OrdinalIgnoreCase))
-                    {
-                        img = new BitmapImage(new Uri(path, UriKind.Absolute));
-                    }
-                    // Ellers forsøg at fortolke stien som relativ til app-basen
-                    else
-                    {
-                        var appPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path.TrimStart('\\', '/').Replace('/', Path.DirectorySeparatorChar));
-                        if (File.Exists(appPath))
-                        {
-                            img = new BitmapImage();
-                            img.BeginInit();
-                            img.UriSource = new Uri(appPath, UriKind.Absolute);
-                            img.CacheOption = BitmapCacheOption.OnLoad;
-                            img.EndInit();
-                        }
+                        registeredText = registeredText + ", ";
                     }
                 }
+                
+                RegisteredList.Text = registeredText;
             }
-            catch
+
+            //Opdater tilmeld-knap
+            bool isRegistered = false;
+            for (int i = 0; i < activity.RegisteredUsers.Count; i++)
             {
-                // Hvis indlæsning mislykkes, lad img være null (ingen preview)
-                img = null;
+                if (activity.RegisteredUsers[i] == userId)
+                {
+                    isRegistered = true;
+                    break;
+                }
             }
 
-            // Sæt cover-billedet (kan være null)
-            CoverImage.Source = img;
-
-            // Opdater tilmeld-knap afhængig af om brugeren allerede er tilmeldt og om aktiviteten er fuld
-            if (activity.RegisteredUsers.Contains(userId))
+            if (isRegistered)
             {
                 RegisterBtn.Content = "Tilmeldt";
                 RegisterBtn.IsEnabled = false;
@@ -91,32 +107,77 @@ namespace ActiviaAPP.Popups
             else
             {
                 RegisterBtn.Content = "Tilmeld";
-                RegisterBtn.IsEnabled = activity.MaxParticipants == 0 || activity.CurrentParticipantCount < activity.MaxParticipants;
+                
+                //Tjek om aktiviteten er fuld
+                if (activity.MaxParticipants == 0)
+                {
+                    RegisterBtn.IsEnabled = true;
+                }
+                else if (activity.RegisteredUsers.Count < activity.MaxParticipants)
+                {
+                    RegisterBtn.IsEnabled = true;
+                }
+                else
+                {
+                    RegisterBtn.IsEnabled = false;
+                }
             }
         }
 
-        // Håndter klik på Tilmeld-knap: til- eller afmeld bruger
+        //Metode til tilmelding
         private void RegisterBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (activity.RegisteredUsers.Contains(userId))
+            //Tjek om brugeren er tilmeldt
+            bool isRegistered = false;
+            for (int i = 0; i < activity.RegisteredUsers.Count; i++)
             {
-                // Hvis allerede tilmeldt -> forsøg at afmelde
-                var removed = activity.Unregister(userId);
-                if (removed) MessageBox.Show("Du er afmeldt aktiviteten");
+                if (activity.RegisteredUsers[i] == userId)
+                {
+                    isRegistered = true;
+                    break;
+                }
+            }
+
+            if (isRegistered)
+            {
+                //Afmeld bruger
+                bool removed = activity.Unregister(userId);
+                if (removed)
+                {
+                    MessageBox.Show("Du er afmeldt aktiviteten");
+                }
             }
             else
             {
-                // Forsøg at tilmelde bruger
-                var ok = activity.Register(userId);
-                if (ok) MessageBox.Show("Du er tilmeldt aktiviteten");
-                else MessageBox.Show("Kunne ikke tilmelde - aktiviteten kan være fuld eller du er allerede tilmeldt");
+                //Tjek om aktiviteten er fuld
+                if (activity.MaxParticipants > 0 && activity.RegisteredUsers.Count >= activity.MaxParticipants)
+                {
+                    MessageBox.Show("Aktiviteten er desværre fuld");
+                    Populate();
+                    return;
+                }
+
+                //Tilmeld bruger
+                bool ok = activity.Register(userId);
+                
+                if (ok)
+                {
+                    MessageBox.Show("Du er tilmeldt aktiviteten");
+                }
+                else
+                {
+                    MessageBox.Show("Kunne ikke tilmelde - der opstod en fejl");
+                }
             }
 
-            // Opdater UI efter handling
+            //Opdater UI
             Populate();
         }
 
-        // Luk vinduet
-        private void CloseBtn_Click(object sender, RoutedEventArgs e) => Close();
+        //Metode til at lukke vinduet
+        private void CloseBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }

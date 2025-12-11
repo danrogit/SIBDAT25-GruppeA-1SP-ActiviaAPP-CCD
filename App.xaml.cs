@@ -5,7 +5,7 @@ using System.Windows;
 namespace ActiviaAPP
 {
     /// <summary>
-    /// Interaction logic for App.xaml
+    /// Adgang/entry point for WPF-applikationen
     /// </summary>
     public partial class App : Application
     {

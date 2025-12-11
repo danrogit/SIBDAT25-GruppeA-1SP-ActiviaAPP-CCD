@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 
 namespace ActiviaAPP.Classes
 {
-    internal class ActivityStore
+    //////Kodet af alle
+    public class ActivityStore
     {
-        //Static/delt liste-objekt for oprettede aktiviteter, som kan tilgås fra både Admin og User
-        public static ObservableCollection<ActivityClass> activities { get; } = new ObservableCollection<ActivityClass>();
+        //Static liste over alle aktiviteter - kan bruges fra både Admin og User
+        public static ObservableCollection<ActivityClass> activities = new ObservableCollection<ActivityClass>();
     }
 }

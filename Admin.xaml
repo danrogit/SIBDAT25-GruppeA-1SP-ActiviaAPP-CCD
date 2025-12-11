@@ -5,7 +5,7 @@
 
     <Page.Resources>
 
-        <!-- 🔥 Orange Activia Button Style -->
+        <!-- Orange Activia Button Style -->
         <Style x:Key="OrangeButton" TargetType="Button">
             <Setter Property="Background" Value="#FFF95F20"/>
             <Setter Property="Foreground" Value="White"/>
@@ -72,10 +72,10 @@
                            FontWeight="Bold"
                            Margin="0,0,0,10"/>
 
+                <!-- RETTET: Fjernet SelectionChanged event -->
                 <ListBox x:Name="ActivityListBox"
                          Height="230"
                          FontFamily="Yu Gothic UI Semibold"
-                         SelectionChanged="activityList"
                          MouseDoubleClick="ActivityListBox_MouseDoubleClick"/>
 
                 <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
@@ -108,10 +108,10 @@
                            FontWeight="Bold"
                            Margin="0,0,0,10"/>
 
+                <!-- RETTET: Fjernet SelectionChanged event -->
                 <ListBox x:Name="userList"
                          Height="230"
-                         FontFamily="Yu Gothic UI Semibold"
-                         SelectionChanged="userList_SelectionChanged"/>
+                         FontFamily="Yu Gothic UI Semibold"/>
 
                 <Button x:Name="DeleteUser"
                         Content="Slet medlem"

@@ -12,7 +12,7 @@
         <!-- Converter -->
         <local:RegisteredToVisibilityConverter x:Key="RegisteredToVisibility"/>
 
-        <!-- 🔥 Orange Activia Button Style -->
+        <!-- Orange Activia Button Style -->
         <Style x:Key="OrangeButton" TargetType="Button">
             <Setter Property="Background" Value="#FFF95F20"/>
             <Setter Property="Foreground" Value="White"/>
@@ -96,18 +96,19 @@
                                         <TextBlock Text="{Binding ActivityTitle}"
                                                    FontWeight="Bold"
                                                    FontSize="14"
-                                                   FontFamily="Poppins"/>
+                                                   FontFamily="Poppins"
+                                                   Foreground="#FF2C3E50"/>
 
                                         <TextBlock Text="{Binding Date, StringFormat='dd-MM-yyyy'}"
                                                    FontSize="11"
-                                                   Foreground="Gray"
+                                                   Foreground="#FF7F8C8D"
                                                    Margin="0,2,0,0"/>
                                     </StackPanel>
 
                                     <!-- Status -->
                                     <TextBlock VerticalAlignment="Center"
                                                FontWeight="Bold"
-                                               Foreground="Green"
+                                               Foreground="#FF27AE60"
                                                FontFamily="Poppins">
 
                                         <TextBlock.Visibility>

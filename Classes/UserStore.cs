@@ -1,246 +1,138 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ActiviaAPP.Classes
 {
-    //Klasse til håndtering af brugere når disse oprettes
+    //Klasse til håndtering af brugere
     public class UserStore
     {
-        //ObservableCollection til håndtering af medlemmer (denne listetype er redigerbar)
-        public static ObservableCollection<User> RegisteredUsers { get; } = new ObservableCollection<User>();
-      
-        //Metode til login af "user"
-        public static User? FindUser(string username, string password)
+        //Liste over alle registrerede brugere
+        public static ObservableCollection<User> RegisteredUsers = new ObservableCollection<User>();
+
+        //Metode til at finde en bruger ved login - RETTET: Return type kan være null
+        public static User FindUser(string username, string password)
         {
-            //Søger gennem listen "RegisteredUsers", og returnerer den bruger der matcher brugernavn og kodeord, ellers returnere den null
-            return RegisteredUsers.FirstOrDefault(u =>
-                u.Username.Equals(username, StringComparison.OrdinalIgnoreCase) && u.Password == password);
+            //Loop gennem alle brugere
+            for (int i = 0; i < RegisteredUsers.Count; i++)
+            {
+                User user = RegisteredUsers[i];
+
+                //Sammenlign brugernavn og password (ignorer store/små bogstaver i brugernavn)
+                string usernameLower = user.Username.ToLower();
+                string inputUsernameLower = username.ToLower();
+
+                if (usernameLower == inputUsernameLower && user.Password == password)
+                {
+                    return user;
+                }
+            }
+            
+            //Ingen bruger fundet - return null er OK her
+            return null;
         }
-     
-        //Metode til at tjekke om et brugernavn allerede eksisterer i listen "RegisteredUsers", ved oprettelse af login
+
+        //Metode til at tjekke om et brugernavn allerede eksisterer
         public static bool UsernameExists(string username)
         {
-            return RegisteredUsers.Any(u => u.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+            //Loop gennem alle brugere
+            for (int i = 0; i < RegisteredUsers.Count; i++)
+            {
+                string existingUsername = RegisteredUsers[i].Username.ToLower();
+                string inputUsername = username.ToLower();
+
+                if (existingUsername == inputUsername)
+                {
+                    return true;
+                }
+            }
+            
+            return false;
         }
-       
-        //Metode til at oprette et nyt medlem, hvis brugernavnet ikke allerede eksisterer
+
+        //Metode til at registrere en ny bruger
         public static bool RegisterUser(User user)
         {
-            //Hvis det angivne brugernavn allerede eksisterer, returneres false
+            //Tjek om brugernavnet allerede eksisterer
             if (UsernameExists(user.Username))
+            {
                 return false;
+            }
 
-            //Hvis brugernavnet ikke eksisterer, tilføjes brugeren til listen og returneres true
+            //Tilføj brugeren til listen
             RegisteredUsers.Add(user);
             return true;
         }
-    
-        //Medtode til indlæsning af brugere fra en CSV fil
+
+        //Metode til at indlæse brugere fra en CSV fil
         public static void LoadFromCsv(string filePath)
         {
-            //Der tjekkes for gyldig filsti og om filen eksisterer, ellers kommes der med en fejlmeddelelse
-            if (string.IsNullOrWhiteSpace(filePath))
-                throw new ArgumentException("Filsti eksisterer ikke", nameof(filePath));
+            //Tjek om filen eksisterer
             if (!File.Exists(filePath))
-                throw new FileNotFoundException("CSV fil ikke fundet", filePath);
+            {
+                throw new FileNotFoundException("CSV fil ikke fundet");
+            }
 
-            //Filen læses linje for linje, og gemmes i en array af strings
-            var lines = File.ReadAllLines(filePath, Encoding.UTF8);
+            //Læs alle linjer fra filen
+            string[] lines = File.ReadAllLines(filePath);
 
-            //Rydder eksisterende liste før indlæsning af filen
+            //Ryd listen først
             RegisteredUsers.Clear();
 
-            //Loop til at gennemgå hver linje i filen
-            foreach (var rawLine in lines)
+            //Loop gennem hver linje
+            for (int i = 0; i < lines.Length; i++)
             {
-                //Springer tomme linjer over i filen
-                if (string.IsNullOrWhiteSpace(rawLine))
-                    continue;
+                string line = lines[i];
 
-                //Fjerner udnødvendige mellemrum, "" og parenteser
-                var raw = rawLine.Trim();
-                if (raw.StartsWith("(") && raw.EndsWith(")"))
-                    raw = raw.Substring(1, raw.Length - 2).Trim();
-
-                //Kode der "delimiter" - adskiller felterne i linjen ud fra enten semikolon eller komma
-                char delimiter = raw.Contains(';') ? ';' : ',';
-
-                //Deler filen op i felter, fjerner unødvendige mellemrum og "", og gemmer dem i et array
-                var fields = ParseDelimitedLine(raw, delimiter)
-                             .Select(f => Unquote(f.Trim()))
-                             .ToArray();
-
-                //Springer linjen over hvis der ikke er nogen felter
-                if (fields.Length == 0)
-                    continue;
-
-                //Fjerner eventuelle tomme tegn i starten af det første felt
-                var first = fields[0].Trim();
-
-                //Sammenligner det første felt med kendte header-navne og springer linjen over hvis der er et match
-                if (first.Equals("username", StringComparison.OrdinalIgnoreCase) ||
-                    first.Equals("brugernavn", StringComparison.OrdinalIgnoreCase) ||
-                    first.Equals("fullname", StringComparison.OrdinalIgnoreCase) ||
-                    first.Equals("navn", StringComparison.OrdinalIgnoreCase))
-                    continue;
-
-                //Variabler til at holde brugeroplysninger af medlemmerne
-                string username = string.Empty;
-                string password = string.Empty;
-                string fullname = string.Empty;
-                string email = string.Empty;
-                string phone = string.Empty;
-              
-                //Hvis det første felt ikke indeholder "@", antages det at være "fullname"
-                if (fields.Length >= 5 && fields[0].Contains(' ') && !fields[0].Contains("@"))
+                //Spring tomme linjer over
+                if (line == "")
                 {
-                    //Det antages at formatet i filen er: fullname, username, password, email, phone
-                    fullname = fields[0];
-                    username = fields[1];
-                    password = fields[2];
-                    email = fields[3];
-                    phone = fields[4];
+                    continue;
                 }
 
-                //Hvis ikke at ovenstående er tilfældet, antages det at være i formatet: username, password, fullname, email, phone
-                else if (fields.Length >= 5)
-                {
-                    //Det antages at formatet i filen er: fullname, username, password, email, phone
-                    username = fields[0];
-                    password = fields[1];
-                    fullname = fields[2];
-                    email = fields[3];
-                    phone = fields[4];
-                }
+                //Split linjen ved semikolon
+                string[] parts = line.Split(';');
 
-                //Hvis ikke de ovenståede matcher, håndteres det som et "fallback"
-                else
+                //Skal have mindst 5 dele
+                if (parts.Length < 5)
                 {
-                    //Der udfyldes hvad der er tilgængeligt i felterne
-                    if (fields.Length > 0) username = fields[0];
-                    if (fields.Length > 1) password = fields[1];
-                    if (fields.Length > 2) fullname = fields[2];
-                    if (fields.Length > 3) email = fields[3];
-                    if (fields.Length > 4) phone = fields[4];
-                }
-
-                //Opretter et nyt medlemsobjekt ud fra de tastede oplysninger
-                var user = new User
-                {
-                    //Sætter værdierne til det valgte af medlemmet, ellers er værdien en tom string, dette sikrer mod null værdier
-                    Username = username ?? string.Empty,
-                    Password = password ?? string.Empty,
-                    FullName = fullname ?? string.Empty,
-                    Email = email ?? string.Empty,
-                    Phone = phone ?? string.Empty
-                };
-
-                //Hvis brugernavnet er tomt, springes linjen over
-                if (string.IsNullOrWhiteSpace(user.Username))
                     continue;
-
-                //Hvis ikke brugernavnet allerede eksisterer, tilføjes medlemmet til listen
-                if (!UsernameExists(user.Username))
-
-                    //Brugernavnet/medlemmet tilføjes til RegisteredUsers listen
-                    RegisteredUsers.Add(user);
-            }
-        }
-
-        //Metode til at køre en linje igennem og splitte den op i felter baseret på en given delimiter/separator
-        private static string[] ParseDelimitedLine(string line, char delimiter)
-        {
-            //Liste til at holde de opdelte felter
-            var result = new List<string>();
-
-            //Hvis linjen er null, returneres et tom array
-            if (line == null)
-                return result.ToArray();
-
-            //StringBuilder benyttes til at have en redigerbar string
-            var cur = new StringBuilder();
-
-            //Bool til at holde styr på om vi er inden i anførselstegn
-            bool inQuotes = false;
-
-            //Loop der kører gennem hvert tegn i linjen
-            for (int i = 0; i < line.Length; i++)
-            {
-                //Henter det aktuelle tegn
-                char c = line[i];
-
-                //Så længe at vi er inden i anførselstegn, er den "true"
-                if (inQuotes)
-                {
-                    if (c == '"')
-                    {
-                        
-                        //Deler ordene hvis der er dobbelte anførselstegn
-                        if (i + 1 < line.Length && line[i + 1] == '"')
-                        {
-                            cur.Append('"');
-                            i++;
-                        }
-                        else
-                        {
-                            //Afslutning af quoted felt
-                            inQuotes = false;
-                        }
-                    }
-                    else
-                    {
-                        //Tilføjer tegn som det er
-                        cur.Append(c);
-                    }
                 }
-                else
+
+                //Tjek om det er header-linjen
+                string firstPart = parts[0].Trim().ToLower();
+                if (firstPart == "username" || firstPart == "brugernavn" || firstPart == "fullname" || firstPart == "navn")
                 {
-                    //Sørger for, at behandle hele teksten korrekt, medtager derfor , og andre tegn
-                    if (c == '"')
-                    {
-                        //
-                        inQuotes = true;
-                    }
+                    continue;
+                }
 
-                    //Hvis der er en delimiter, afsluttes feltet
-                    else if (c == delimiter)
-                    {
-                        //Resultatet gemmes i "result" listen
-                        result.Add(cur.ToString());
+                //Hent data fra CSV: FullName;Username;Password;Email;Phone
+                string fullname = parts[0].Trim();
+                string username = parts[1].Trim();
+                string password = parts[2].Trim();
+                string email = parts[3].Trim();
+                string phone = parts[4].Trim();
 
-                        //"cur" nulstilles for næste felt
-                        cur.Clear();
-                    }
+                //Spring over hvis username er tom
+                if (username == "")
+                {
+                    continue;
+                }
 
-                    //Tegnet tilføjes til det aktuelle felt
-                    else
-                    {                      
-                        cur.Append(c);
-                    }
+                //Opret ny bruger
+                User newUser = new User();
+                newUser.Username = username;
+                newUser.Password = password;
+                newUser.FullName = fullname;
+                newUser.Email = email;
+                newUser.Phone = phone;
+
+                //Tilføj kun hvis brugernavnet ikke allerede eksisterer
+                if (!UsernameExists(newUser.Username))
+                {
+                    RegisteredUsers.Add(newUser);
                 }
             }
-
-            //Tilføjer sidste felt også selvom det er tomt
-            result.Add(cur.ToString());
-            return result.ToArray();
-        }
-
-        //Funktion der fjerner eventuelle omgivende anførselstegn
-        private static string Unquote(string s)
-        {
-            //Hvis strengen er tom eller null, returneres den som den er
-            if (string.IsNullOrEmpty(s))
-                return s;
-
-            //Hvis strengen starter og slutter med anførselstegn, fjernes de og eventuelle dobbelte "" erstattes med "
-            if (s.Length >= 2 && s[0] == '"' && s[^1] == '"')
-                return s.Substring(1, s.Length - 2).Replace("\"\"", "\"");
-            return s;
         }
     }
 }
