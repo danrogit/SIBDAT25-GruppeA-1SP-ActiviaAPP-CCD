@@ -39,7 +39,8 @@ namespace ActiviaAPP.Classes
             RegisteredUsers.Add(user);
             return true;
         }
-    
+
+        //Der er benyttet hjælp fra AI til at lave denne metode, da upload af CSV filer ikke er noget vi har lært endnu
         //Medtode til indlæsning af brugere fra en CSV fil
         public static void LoadFromCsv(string filePath)
         {

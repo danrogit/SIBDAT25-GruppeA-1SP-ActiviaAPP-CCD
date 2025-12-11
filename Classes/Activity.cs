@@ -9,6 +9,7 @@ using System.Windows.Media.Animation;
 
 namespace ActiviaAPP.Classes
 {
+    //Kodet af Camilla
     public class ActivityClass
     {
         // Public attributter som bruges i UI og når aktiviteter oprettes

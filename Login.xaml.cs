@@ -20,7 +20,7 @@ namespace ActiviaAPP
 {
     public partial class Login : Page
     {
-
+        //Kodet af Daniel
         public Login()
         {
             InitializeComponent();
@@ -84,6 +84,7 @@ namespace ActiviaAPP
             }
         }
 
+        //Der er benyttet hjælp fra AI til at lave denne metode, da upload af CSV filer ikke er noget vi har lært endnu
         // Håndter "Upload CSV"-knappens klik for at indlæse brugere fra en CSV-fil
         private void UploadCsv(object sender, RoutedEventArgs e)
         {

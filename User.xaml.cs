@@ -8,6 +8,7 @@ using ActiviaAPP.Popups;
 
 namespace ActiviaAPP
 {
+    //Kodet af Daniel og Camilla
     //Partial class user, partial tillader os at dele klassen i flere filer
     public partial class User : Page, INotifyPropertyChanged
     {

@@ -94,6 +94,7 @@ namespace ActiviaAPP
             }
         }
 
+        //Der er benyttet hjælp fra AI til at lave denne metode, da upload af CSV filer ikke er noget vi har lært endnu
         // Åbn en filvælger og indlæs brugere via UserStore.LoadFromCsv
         private void adminSettings(object sender, RoutedEventArgs e)
         {
@@ -124,6 +125,7 @@ namespace ActiviaAPP
             }
         }
 
+        //Der er benyttet hjælp fra AI til at lave denne metode, da upload af CSV filer ikke er noget vi har lært endnu
         //Metode til upload af aktiviteter fra CSV
         private void UploadActivities(object sender, RoutedEventArgs e)
         {

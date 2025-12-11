@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace ActiviaAPP.Classes
 {
+    //Kodet af alle
     public class User
     {
         //Brugerens oplysninger, som bliver sat ved oprettelse af bruger, er tom som standard

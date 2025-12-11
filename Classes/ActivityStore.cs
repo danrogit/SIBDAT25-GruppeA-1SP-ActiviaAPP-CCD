@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace ActiviaAPP.Classes
 {
+    //Kodet af alle
     internal class ActivityStore
     {
         //Static/delt liste-objekt for oprettede aktiviteter, som kan tilgås fra både Admin og User

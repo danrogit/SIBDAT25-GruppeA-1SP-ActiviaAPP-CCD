@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 
 namespace ActiviaAPP
 {
+    //Kodet af Casper
     public partial class SignUp : Page
     {
         public SignUp()

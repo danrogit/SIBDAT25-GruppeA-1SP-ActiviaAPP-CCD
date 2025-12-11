@@ -18,7 +18,7 @@ namespace ActiviaAPP
 {
     public partial class MainWindow : Window
 
-    {
+    {   //Kodet af alle
 
         //Konstruktør for MainWindow klassen, der derved fra start automatisk kører login siden
         public MainWindow()
