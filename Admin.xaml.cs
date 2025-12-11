@@ -15,7 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ActiviaAPP.Classes;
 using ActiviaAPP.Popups;
-using Microsoft.Win32; // til OpenFileDialog
+using Microsoft.Win32; 
 using System.IO;
 using System.Globalization;
                                                     
