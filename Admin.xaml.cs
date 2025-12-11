@@ -94,7 +94,7 @@ namespace ActiviaAPP
             }
         }
 
-        //Der er benyttet hjælp fra AI til at lave denne metode, da upload af CSV filer ikke er noget vi har lært endnu
+        //Denne kode er genereret ved hjælp af AI-værktøj, da vi har begrænset erfaring med denne type implementering 
         // Åbn en filvælger og indlæs brugere via UserStore.LoadFromCsv
         private void adminSettings(object sender, RoutedEventArgs e)
         {
@@ -125,7 +125,7 @@ namespace ActiviaAPP
             }
         }
 
-        //Der er benyttet hjælp fra AI til at lave denne metode, da upload af CSV filer ikke er noget vi har lært endnu
+        //Denne kode er genereret ved hjælp af AI-værktøj, da vi har begrænset erfaring med denne type implementering
         //Metode til upload af aktiviteter fra CSV
         private void UploadActivities(object sender, RoutedEventArgs e)
         {
@@ -143,7 +143,7 @@ namespace ActiviaAPP
             if (dlg.ShowDialog() != true)
                 return;
 
-
+            //Denne kode er genereret ved hjælp af AI-værktøj, da vi har begrænset erfaring med denne type implementering
             try
             {
                 //Læs fil som UTF-8
@@ -252,6 +252,7 @@ namespace ActiviaAPP
                 //Succes besked med antal aktiviteter, når alle linjer er behandlet
                 MessageBox.Show($"Aktiviteter importeret: {added}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
+            //Denne kode er genereret ved hjælp af AI-værktøj, da vi har begrænset erfaring med denne type implementering
             //Fejlbesked hvis der opstår en undtagelse under indlæsningen af filen
             catch (Exception ex)
             {
@@ -259,6 +260,7 @@ namespace ActiviaAPP
             }
         }
 
+        //Denne kode er genereret ved hjælp af AI-værktøj, da vi har begrænset erfaring med denne type implementering
         //Gør en tekststreng til en gyldig billedsti
         private static string ResolveImagePath(string path)
         {
@@ -289,6 +291,7 @@ namespace ActiviaAPP
             return packPath;
         }
 
+        //Denne kode er genereret ved hjælp af AI-værktøj, da vi har begrænset erfaring med denne type implementering
         //SplitLine metode der læser linjerne i CSV-filen og opdeler felterne korrekt
         private static IEnumerable<string> SplitLine(string line, char delimiter)
         {
@@ -351,6 +354,7 @@ namespace ActiviaAPP
             yield return cur.ToString();
         }
 
+        //Denne kode er genereret ved hjælp af AI-værktøj, da vi har begrænset erfaring med denne type implementering
         // Fjern omgivelserende anførselstegn og af-escape dobbelte quotes.
         private static string Unquote(string s)
         {

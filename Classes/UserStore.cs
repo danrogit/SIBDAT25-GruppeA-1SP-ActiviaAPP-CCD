@@ -40,7 +40,7 @@ namespace ActiviaAPP.Classes
             return true;
         }
 
-        //Der er benyttet hjælp fra AI til at lave denne metode, da upload af CSV filer ikke er noget vi har lært endnu
+        //Denne kode er genereret ved hjælp af AI-værktøj, da vi har begrænset erfaring med denne type implementering
         //Medtode til indlæsning af brugere fra en CSV fil
         public static void LoadFromCsv(string filePath)
         {
@@ -153,6 +153,7 @@ namespace ActiviaAPP.Classes
             }
         }
 
+        //Denne kode er genereret ved hjælp af AI-værktøj, da vi har begrænset erfaring med denne type implementering
         //Metode til at køre en linje igennem og splitte den op i felter baseret på en given delimiter/separator
         private static string[] ParseDelimitedLine(string line, char delimiter)
         {
@@ -199,6 +200,8 @@ namespace ActiviaAPP.Classes
                         cur.Append(c);
                     }
                 }
+
+                //Denne kode er genereret ved hjælp af AI-værktøj, da vi har begrænset erfaring med denne type implementering
                 else
                 {
                     //Sørger for, at behandle hele teksten korrekt, medtager derfor , og andre tegn
@@ -231,6 +234,7 @@ namespace ActiviaAPP.Classes
             return result.ToArray();
         }
 
+        //Denne kode er genereret ved hjælp af AI-værktøj, da vi har begrænset erfaring med denne type implementering
         //Funktion der fjerner eventuelle omgivende anførselstegn
         private static string Unquote(string s)
         {

@@ -84,7 +84,7 @@ namespace ActiviaAPP
             }
         }
 
-        //Der er benyttet hjælp fra AI til at lave denne metode, da upload af CSV filer ikke er noget vi har lært endnu
+        //Denne kode er genereret ved hjælp af AI-værktøj, da vi har begrænset erfaring med denne type implementering
         // Håndter "Upload CSV"-knappens klik for at indlæse brugere fra en CSV-fil
         private void UploadCsv(object sender, RoutedEventArgs e)
         {
